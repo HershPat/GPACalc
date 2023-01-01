@@ -1,3 +1,4 @@
+import time
 import selenium, stdiomask
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -21,6 +22,7 @@ class Account():
         #options.add_argument(r'user-agent=Mozilla/5.0 (Windows NT 10.0 Win64 x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54')
         driver = webdriver.Chrome(options=options)
         driver.get(self.auth_link)
+        time.sleep(1)
 
         usernameField = driver.find_element(By.NAME, 'j_username')
         usernameField.send_keys(self.username)
@@ -84,7 +86,7 @@ def organizeGradeTable(gradeTable, creditTable):
         else:
             percentGrades.append(gradeTable[i][0])
     for i in range(len(letterGrades)):
-        if letterGrades[i].find('0') != 0 or percentGrades[i].find('Not Graded') != 0:
+        if letterGrades[i].find('0') != 0 or percentGrades[i].find('No') != 0:
             organizedGradeTable[0].append(classes[i])
             organizedGradeTable[1].append(teachers[i])
             organizedGradeTable[2].append(letterGrades[i])
@@ -109,7 +111,7 @@ account.authInfo(j_username, j_password, studentId, markingPeriod)
 account.get_grades_and_credits()
 gradeTable, creditTable = account.parse_data()
 organizedGrades = organizeGradeTable(gradeTable=gradeTable, creditTable=creditTable)
-
+print(organizedGrades)
 listGradeNums = {
     'A+': 10,
     'A': 9,
@@ -170,4 +172,3 @@ print("GPA")
 print("=================================")
 print(f"Unweighted GPA for MP{markingPeriodNumber}: {uwGPA}")
 print(f"Weighted GPA for MP{markingPeriodNumber}  : {wGPA}")
-
